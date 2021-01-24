@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { Form, Input, Button} from 'antd';
+import {connect} from "react-redux";
+import {createDemo1Action,createDemo2Action} from "../../redux/actions/test_action";
 import './login.less'
 import logo from './imgs/logo.jpg'
-export default class login extends Component {
+class Login extends Component {
   layout = {
     labelCol: {
       span: 5,
@@ -31,7 +33,7 @@ export default class login extends Component {
           <h1>小红商品后台管理系统</h1>
         </header>
         <section>
-          <h1>机密核心人员登陆页面</h1>
+          <h1>机密核心人员登陆页面{this.props.test}</h1>
           <Form
             {...this.layout}
             name="basic"
@@ -90,3 +92,12 @@ export default class login extends Component {
     )
   }
 }
+export default connect(
+  state =>({
+    demo:state.test
+  }),
+  {
+    demo1:createDemo1Action,
+    demo2:createDemo2Action
+  }
+)(Login)
