@@ -1,35 +1,29 @@
 import React, { Component } from 'react'
-
+import { increment,decrement } from "./redux/action_creators";
 export default class App extends Component {
-  state={
-    count:0
-  }
   increment = ()=>{
     let {value} = this.refs.selectNumber
-    let {count} = this.state
-    this.setState({count:count+value*1})
+    this.props.store.dispatch(increment(value))
   }
   decrement = ()=>{
     let {value} = this.refs.selectNumber
-    let {count} = this.state
-    this.setState({count:count-value*1})
+    this.props.store.dispatch(decrement(value))
   }
   oddIncrement= ()=>{
     let {value} = this.refs.selectNumber
-    let {count} = this.state
-    if(count%2!==0){
-      this.setState({count:count+value*1})
+    let count = this.props.store.getState()
+    if(count%2===1){
+      this.props.store.dispatch(increment(value))
     }
   }
   asyncIncrement= ()=>{
     let {value} = this.refs.selectNumber
-    let {count} = this.state
     setTimeout(() => { 
-      this.setState({count:count+value*1})
-    },2000);
+      this.props.store.dispatch(increment(value))
+    },1000);
   }
   render() {
-    let {count} = this.state
+    let count = this.props.store.getState()
     return (
       <div>
         <h3>当前计数为：{count}</h3>
@@ -44,5 +38,8 @@ export default class App extends Component {
         <button onClick={this.asyncIncrement}>async</button>
       </div>
     )
+  }
+  componentDidMount(){
+    console.log(this.props.store);
   }
 }
