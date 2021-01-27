@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
-import { Form, Input, Button} from 'antd';
+import { Form, Input, Button,message} from 'antd';
 import {connect} from "react-redux";
-import {createDemo1Action,createDemo2Action} from "../../redux/actions/test_action";
+
+import {createDemo1Action} from "../../redux/actions/test_action";
 import {reqLogin} from "../../api";
+
 import './login.less'
-import logo from './imgs/logo.jpg'         
+import logo from './imgs/logo.jpg' 
+
 class Login extends Component {
   layout = {
     labelCol: {
@@ -20,13 +23,28 @@ class Login extends Component {
       span: 16,
     },
   };
-  onFinish = (values) => {
+  onFinish = async (values) => {
     // console.log('Success:', values);
-    // let {username,password} = values
-    reqLogin(values)
+    let {username,password} = values
+    let result = await reqLogin(username,password)
+    const {status,msg} = result
+    if(status===0){
+      message.info('登陆成功')
+
+    }else{
+      message.warning(msg)
+    }
+    //表单项验证成功，发送ajax请求
+    // reqLogin(username,password)
+    // .then((result)=>{
+    //   console.log(result)
+    // })
+    // .catch((err)=>{
+    //   console.log(err)
+    // })
   };
   onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    message.error(errorInfo.errorFields[0].errors)
   };
   render() {
     return (
@@ -69,17 +87,10 @@ class Login extends Component {
                 {min: 4,message: '密码最短4位!'},
                 {max: 12,message: '密码最长12位!'},
                 {pattern: /^[a-zA-Z0-9_]+$/,message: '只能使用字母数字下划线!'},    
-                {/*
-                ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
-                return Promise.resolve();
-              }
-
-              return Promise.reject('The two passwords that you entered do not match!');
-            },
-          }),
-                */}
+                // {
+                //   validator: (_, value) =>
+                //     value ? Promise.resolve() : Promise.reject('Should accept agreement'),
+                // }
               ]}
             >
               <Input.Password />
@@ -100,7 +111,6 @@ export default connect(
     demo:state.test
   }),
   {
-    demo1:createDemo1Action,
-    demo2:createDemo2Action
+    demo1:createDemo1Action
   }
 )(Login)
