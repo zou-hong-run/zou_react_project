@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Form, Input, Button,message} from 'antd';
 import {connect} from "react-redux";
+import {Redirect} from 'react-router-dom';
 
-import {createDemo1Action} from "../../redux/actions/test_action";
+import {saveUserInfoAction} from "../../redux/actions/login_action";
 import {reqLogin} from "../../api";
 
 import './login.less'
@@ -27,10 +28,13 @@ class Login extends Component {
     // console.log('Success:', values);
     let {username,password} = values
     let result = await reqLogin(username,password)
-    const {status,msg} = result
+    const {status,msg,data} = result
     if(status===0){
       message.info('登陆成功')
-
+      //1.把数据交给redux给后面的组件共用
+      this.props.saveUserInfo(data)
+      //2.跳转页面
+      this.props.history.replace('/admin')
     }else{
       message.warning(msg)
     }
@@ -47,6 +51,10 @@ class Login extends Component {
     message.error(errorInfo.errorFields[0].errors)
   };
   render() {
+    const {isLogin} = this.props
+    if(isLogin){//如果已经登陆了，直接去admin页面
+      return <Redirect to='/admin'/>
+    }
     return (
       <div className='login'>
         <header>
@@ -105,12 +113,12 @@ class Login extends Component {
       </div>
     )
   }
+  componentDidMount(){
+  }
 }
 export default connect(
-  state =>({
-    demo:state.test
-  }),
+  state=>({isLogin:state.userInfo.isLogin}),//映射redux中的总状态到props中
   {
-    demo1:createDemo1Action
+    saveUserInfo:saveUserInfoAction
   }
 )(Login)
