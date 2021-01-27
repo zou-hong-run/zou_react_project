@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-
-export default class admin extends Component {
+import {connect} from "react-redux";
+import {createDemo1Action} from "../../redux/actions/test_action";
+class admin extends Component {
   render() {
     return (
       <div>
@@ -9,3 +10,11 @@ export default class admin extends Component {
     )
   }
 }
+export default connect(
+  state=>({
+    demo2:state.test
+  }),
+  {
+    demo2:createDemo1Action
+  }
+)(admin)

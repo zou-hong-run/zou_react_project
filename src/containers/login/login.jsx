@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { Form, Input, Button} from 'antd';
 import {connect} from "react-redux";
 import {createDemo1Action,createDemo2Action} from "../../redux/actions/test_action";
+import {reqLogin} from "../../api";
 import './login.less'
-import logo from './imgs/logo.jpg'
+import logo from './imgs/logo.jpg'         
 class Login extends Component {
   layout = {
     labelCol: {
@@ -20,7 +21,9 @@ class Login extends Component {
     },
   };
   onFinish = (values) => {
-    console.log('Success:', values);
+    // console.log('Success:', values);
+    // let {username,password} = values
+    reqLogin(values)
   };
   onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -46,7 +49,7 @@ class Login extends Component {
           >
             <Form.Item
               label="用户名"
-              name="Username"
+              name="username"
               rules={[
                 {required: true,message: '请输入用户名!'},
                 {max: 12,message: '用户名最长12位!'},
