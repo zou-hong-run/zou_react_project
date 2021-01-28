@@ -5,6 +5,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import {connect} from 'react-redux'
 import {FullscreenOutlined,FullscreenExitOutlined} from '@ant-design/icons';
 import screenfull from 'screenfull';
+import dayjs from 'dayjs';//转换时间戳的一个库
 
 import {createDeleteUserInfoAction} from '../../../redux/actions/login_action'
 import './css/header.less'
@@ -18,7 +19,21 @@ const { confirm } = Modal;
 )
 class Header extends Component {
   state = {
-    isFull:false
+    isFull:false,
+    date:Date.now()
+  }
+  componentDidMount(){
+    //监听用户是否点击全屏按钮                                      
+    screenfull.on('change', () => {
+      this.setState({
+        isFull:!this.state.isFull
+      })
+    })
+    setInterval(()=>{
+      this.setState({
+        date:dayjs().format('YYYY年 MM月 DD日 HH:mm:ss A') // 展示时间
+      })
+    },1000)
   }
   //切换全屏按钮的回调
   fullScreen = ()=>{
@@ -60,21 +75,13 @@ class Header extends Component {
             柱状图
           </div>
           <div className='header-bottom-right'>
-            时间
+            {this.state.date}
             <img src='http://app1.showapi.com/weather/icon/day/00.png' alt="tianqi"/>
             晴 温度：2~5
           </div>
         </div>
       </header>
     )
-  }
-  componentDidMount(){
-    //监听用户是否点击全屏按钮                                      
-    screenfull.on('change', () => {
-      this.setState({
-        isFull:!this.state.isFull
-      })
-    });
   }
 }
 export default Header
