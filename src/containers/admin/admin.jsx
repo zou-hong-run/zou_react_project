@@ -4,7 +4,6 @@ import {Redirect,Route,Switch} from 'react-router-dom';
 import { Layout } from 'antd';
 
 import {reqCategory} from '../../api/index';
-import {createDeleteUserInfoAction} from '../../redux/actions/login_action';
 
 import Header from './header/header';
 import './css/admin.less';
@@ -24,14 +23,9 @@ const { Footer, Sider, Content } = Layout;
   state=>({
     userInfo:state.userInfo
   }),
-  {
-    deleteUserInfo:createDeleteUserInfoAction
-  }
+  {}
 )
 class admin extends Component {
-  logout = ()=>{
-    this.props.deleteUserInfo()
-  }
   getList = async ()=>{
     let result = await reqCategory()
     console.log(result)

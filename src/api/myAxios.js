@@ -3,6 +3,7 @@ import qs from 'querystring';
 import {message} from 'antd';
 import NProgress from 'nprogress';
 import store from '../redux/store';
+import {createDeleteUserInfoAction} from '../redux/actions/login_action';
 
 import 'nprogress/nprogress.css'
 //使用拦截器
@@ -40,9 +41,16 @@ instance.interceptors.response.use((response)=>{
   return response.data;
 },(error)=>{
   NProgress.done()
-  //服务器响应失败
-  // return Promise.reject(error);//阻断,把错误丢给catch()
-  message.error(error.message+"服务器连接错误")
+  // debugger
+  if(error.response.status === 401){
+    message.error('身份校验失败，请从新登陆',2)
+    //分发一个删除用户信息的action
+    store.dispatch(createDeleteUserInfoAction())
+  }else{
+    //服务器响应失败
+    // return Promise.reject(error);//阻断,把错误丢给catch()
+    message.error(error.message+"服务器连接错误")
+  }
   return new Promise(()=>{})//彻底中断，啥也不给外界
 });
 export default instance
