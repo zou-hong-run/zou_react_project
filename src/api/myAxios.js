@@ -2,16 +2,25 @@ import axios from "axios";
 import qs from 'querystring';
 import {message} from 'antd';
 import NProgress from 'nprogress';
+import store from '../redux/store';
 
 import 'nprogress/nprogress.css'
 //使用拦截器
 //实例axios对象，设置请求参数
 const instance = axios.create({
   timeout: 4000,
+  // headers: {'X-Auth-Token': 'your token'},
 });
 //请求拦截器
 instance.interceptors.request.use((config)=>{
   NProgress.start()
+  //从redux中获取之前的token
+  const {token} = store.getState().userInfo
+  if(token){
+    //添加请求头部内容验证是否有token，验证身份
+    console.log('token_'+token)
+    config.headers['Authorization'] = 'token_'+token
+  }
   const {method,data} = config
   if(method.toLowerCase==='post'){
     //是post并且传递过来的参数是对象（json)格式就转化为string

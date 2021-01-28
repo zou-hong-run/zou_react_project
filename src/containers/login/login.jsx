@@ -9,6 +9,12 @@ import {reqLogin} from "../../api";
 import './login.less'
 import logo from './imgs/logo.jpg' 
 
+@connect(
+  state=>({isLogin:state.userInfo.isLogin}),//映射redux中的总状态到props中
+  {
+    saveUserInfo:saveUserInfoAction
+  }
+)
 class Login extends Component {
   layout = {
     labelCol: {
@@ -25,7 +31,6 @@ class Login extends Component {
     },
   };
   onFinish = async (values) => {
-    // console.log('Success:', values);
     let {username,password} = values
     let result = await reqLogin(username,password)
     const {status,msg,data} = result
@@ -113,12 +118,5 @@ class Login extends Component {
       </div>
     )
   }
-  componentDidMount(){
-  }
 }
-export default connect(
-  state=>({isLogin:state.userInfo.isLogin}),//映射redux中的总状态到props中
-  {
-    saveUserInfo:saveUserInfoAction
-  }
-)(Login)
+export default Login
