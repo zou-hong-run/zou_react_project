@@ -10,11 +10,11 @@ import 'nprogress/nprogress.css'
 //实例axios对象，设置请求参数
 const instance = axios.create({
   timeout: 4000,
-  // headers: {'X-Auth-Token': 'your token'},
 });
 //请求拦截器
 instance.interceptors.request.use((config)=>{
   NProgress.start()
+  config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
   //从redux中获取之前的token
   const {token} = store.getState().userInfo
   if(token){
@@ -23,7 +23,7 @@ instance.interceptors.request.use((config)=>{
     config.headers['Authorization'] = 'token_'+token
   }
   const {method,data} = config
-  if(method.toLowerCase==='post'){
+  if(method.toLowerCase()==='post'){
     //是post并且传递过来的参数是对象（json)格式就转化为string
     if(data instanceof Object){
       config.data = qs.stringify(data)

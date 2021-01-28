@@ -8,6 +8,7 @@ import screenfull from 'screenfull';
 import dayjs from 'dayjs';//转换时间戳的一个库
 
 import {createDeleteUserInfoAction} from '../../../redux/actions/login_action'
+import {reqWeather} from '../../../api/index';
 import './css/header.less'
 
 const { confirm } = Modal;
@@ -20,7 +21,8 @@ const { confirm } = Modal;
 class Header extends Component {
   state = {
     isFull:false,
-    date:Date.now()
+    date:Date.now(),
+    weather:{}
   }
   componentDidMount(){
     //监听用户是否点击全屏按钮                                      
@@ -29,11 +31,17 @@ class Header extends Component {
         isFull:!this.state.isFull
       })
     })
-    setInterval(()=>{
+    //刷新显示时间
+    this.timer = setInterval(()=>{
       this.setState({
         date:dayjs().format('YYYY年 MM月 DD日 HH:mm:ss A') // 展示时间
       })
     },1000)
+    //页面挂载后，获取天气(次数有限谨慎使用哈哈哈)
+    // this.getWeather()
+  }
+  componentWillUnmount(){
+    clearInterval(this.timer)
   }
   //切换全屏按钮的回调
   fullScreen = ()=>{
@@ -58,9 +66,17 @@ class Header extends Component {
       },
     });
   }
+  //获取天气
+  getWeather = async ()=>{
+    let result = await reqWeather()
+    let weather = result.showapi_res_body.dayList[0]
+    this.setState({weather})
+  }
   render() {
     let {isFull} = this.state
     let {user} = this.props.userInfo
+    let APM = dayjs().format('A').toLowerCase()
+    let {night_weather_pic,day_weather_pic,day_weather,night_weather,day_air_temperature,night_air_temperature} = this.state.weather
     return (
       <header className='header'>
         <div className="header-top">
@@ -76,8 +92,8 @@ class Header extends Component {
           </div>
           <div className='header-bottom-right'>
             {this.state.date}
-            <img src='http://app1.showapi.com/weather/icon/day/00.png' alt="tianqi"/>
-            晴 温度：2~5
+            <img src={APM==='pm'?night_weather_pic:day_weather_pic} alt="tianqi"/>
+            {APM==='pm'?night_weather:day_weather} 温度：{APM==='pm'?night_air_temperature:day_air_temperature}
           </div>
         </div>
       </header>
