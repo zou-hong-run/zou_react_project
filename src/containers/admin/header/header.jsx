@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {withRouter} from 'react-router-dom';
 import { Modal, Button} from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
@@ -12,12 +13,14 @@ import {reqWeather} from '../../../api/index';
 import './css/header.less'
 
 const { confirm } = Modal;
+
 @connect(
   state=>({userInfo:state.userInfo}),
   {
     deleteUser:createDeleteUserInfoAction
   }
 )
+@withRouter
 class Header extends Component {
   state = {
     isFull:false,
@@ -25,6 +28,7 @@ class Header extends Component {
     weather:{}
   }
   componentDidMount(){
+    console.log(this.props)
     //监听用户是否点击全屏按钮                                      
     screenfull.on('change', () => {
       this.setState({

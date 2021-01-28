@@ -26,6 +26,9 @@ const { Footer, Sider, Content } = Layout;
   {}
 )
 class admin extends Component {
+  componentDidMount(){
+    console.log(this.props)
+  }
   getList = async ()=>{
     let result = await reqCategory()
     console.log(result)
