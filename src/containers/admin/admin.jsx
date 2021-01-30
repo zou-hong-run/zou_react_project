@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import {connect} from "react-redux";
 import {Redirect,Route,Switch} from 'react-router-dom';
-import { Layout } from 'antd';
-
+import {Layout} from 'antd';
 import {reqCategory} from '../../api/index';
 
 import Header from './header/header';
 import './css/admin.less';
+import Leftnav from './left_nav/left_nav';
 
 import Home from '../../components/home/home'
 import Category from '../category/category';
@@ -27,7 +27,7 @@ const { Footer, Sider, Content } = Layout;
 )
 class admin extends Component {
   componentDidMount(){
-    console.log(this.props)
+     
   }
   getList = async ()=>{
     let result = await reqCategory()
@@ -41,7 +41,9 @@ class admin extends Component {
     }else{
       return (
         <Layout className='admin'>
-          <Sider className='sider'>Sider</Sider>
+          <Sider className='sider'>
+            <Leftnav/>
+          </Sider>
           <Layout>
             <Header className='header'>Header</Header>
             <Content className='content'>

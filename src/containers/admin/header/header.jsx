@@ -10,12 +10,16 @@ import dayjs from 'dayjs';//转换时间戳的一个库
 
 import {createDeleteUserInfoAction} from '../../../redux/actions/login_action'
 import {reqWeather} from '../../../api/index';
+import menuList from '../../../config/menu_config';
 import './css/header.less'
 
 const { confirm } = Modal;
 
 @connect(
-  state=>({userInfo:state.userInfo}),
+  state=>({
+    userInfo:state.userInfo,
+    title:state.menuTitle
+  }),
   {
     deleteUser:createDeleteUserInfoAction
   }
@@ -25,10 +29,10 @@ class Header extends Component {
   state = {
     isFull:false,
     date:Date.now(),
-    weather:{}
+    weather:{},
+    title:''
   }
   componentDidMount(){
-    console.log(this.props)
     //监听用户是否点击全屏按钮                                      
     screenfull.on('change', () => {
       this.setState({
@@ -43,6 +47,8 @@ class Header extends Component {
     },1000)
     //页面挂载后，获取天气(次数有限谨慎使用哈哈哈)
     // this.getWeather()
+    //得到显示标题
+    this.getTitle()
   }
   componentWillUnmount(){
     clearInterval(this.timer)
@@ -76,6 +82,26 @@ class Header extends Component {
     let weather = result.showapi_res_body.dayList[0]
     this.setState({weather})
   }
+  //获取标题
+  getTitle = ()=>{
+    let pathKey = this.props.location.pathname.split('/').reverse()[0]
+    let title = ''
+    menuList.forEach((item)=>{
+      if(item.children instanceof Array){
+        let tmp = item.children.find((citem)=>{
+          return citem.key === pathKey
+        })
+        if(tmp){
+          title = tmp.title
+        }
+      }else{
+        if(pathKey === item.key){
+          title = item.title
+        }
+      }
+    })
+    this.setState({title})
+  }
   render() {
     let {isFull} = this.state
     let {user} = this.props.userInfo
@@ -92,7 +118,7 @@ class Header extends Component {
         </div>
         <div className="header-bottom">
           <div className='header-bottom-left'>
-            柱状图
+            {this.props.title||this.state.title}
           </div>
           <div className='header-bottom-right'>
             {this.state.date}

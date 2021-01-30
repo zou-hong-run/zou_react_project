@@ -7,7 +7,7 @@ import {saveUserInfoAction} from "../../redux/actions/login_action";
 import {reqLogin} from "../../api";
 
 import './login.less'
-import logo from './imgs/logo.jpg' 
+import logo from '../../static/imgs/logo.jpg' 
 
 @connect(
   state=>({isLogin:state.userInfo.isLogin}),//映射redux中的总状态到props中
@@ -58,7 +58,7 @@ class Login extends Component {
   render() {
     const {isLogin} = this.props
     if(isLogin){//如果已经登陆了，直接去admin页面
-      return <Redirect to='/admin'/>
+      return <Redirect to='/admin/home'/>
     }
     return (
       <div className='login'>
