@@ -30,7 +30,7 @@ class Header extends Component {
     isFull:false,
     date:Date.now(),
     weather:{},
-    title:''
+    title:'首页'
   }
   componentDidMount(){
     //监听用户是否点击全屏按钮                                      
@@ -118,7 +118,7 @@ class Header extends Component {
         </div>
         <div className="header-bottom">
           <div className='header-bottom-left'>
-            {this.props.title||this.state.title}
+            {this.state.title||this.props.title}
           </div>
           <div className='header-bottom-right'>
             {this.state.date}

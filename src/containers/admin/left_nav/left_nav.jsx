@@ -55,7 +55,7 @@ class Left_nav extends Component {
           <h1>商品管理系统</h1>
         </header>
         <Menu
-          defaultSelectedKeys={[path]}
+          selectedKeys={[path]}
           defaultOpenKeys={pathArr}
           mode="inline"
           theme="dark"

@@ -11,3 +11,7 @@ export const reqWeather = ()=>myAxios.post('https://route.showapi.com/9-9',{
   showapi_sign:SHOWAPI_SIGN,
   area:CITY
 })
+//添加一个分类
+export const reqAddCatetory = (categoryName)=>myAxios.post(BASE_URL+'/manage/category/add',{categoryName})
+//更新分类
+export const reqUpdateCatetory = (categoryId,categoryName) =>myAxios.post(BASE_URL+"/manage/category/update",{categoryId,categoryName})

@@ -30,6 +30,7 @@ class Login extends Component {
       span: 16,
     },
   };
+  //终极表单成功验证
   onFinish = async (values) => {
     let {username,password} = values
     let result = await reqLogin(username,password)
@@ -52,13 +53,14 @@ class Login extends Component {
     //   console.log(err)
     // })
   };
+  //表单失败验证
   onFinishFailed = (errorInfo) => {
     message.error(errorInfo.errorFields[0].errors)
   };
   render() {
     const {isLogin} = this.props
     if(isLogin){//如果已经登陆了，直接去admin页面
-      return <Redirect to='/admin/home'/>
+      return <Redirect to='/admin'/>
     }
     return (
       <div className='login'>

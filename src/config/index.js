@@ -5,3 +5,5 @@ export const SHOWAPI_SIGN = '75f2e18494c94bfea6b7ac7c20044e06'
 export const SHOWAPI_APPID = '528355'
 //当前城市名
 export const CITY = '大竹县'
+//表格每页显示条数
+export const PAGE_SIZE = 5

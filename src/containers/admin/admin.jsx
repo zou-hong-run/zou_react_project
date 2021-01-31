@@ -57,6 +57,7 @@ class admin extends Component {
                 <Route path='/admin/charts/line' component={Line}/>
                 <Route path='/admin/charts/pie' component={Pie}/>
                 <Redirect to='/admin/home'/>
+                {/* 重定向会从app开始重新匹配 */}
               </Switch>
             </Content>
             <Footer>俺们推荐您使用谷歌浏览器，以便获取最佳体验<button onClick={this.getList}></button></Footer>

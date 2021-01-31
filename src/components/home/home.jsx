@@ -5,7 +5,7 @@ import { Calendar, Select, Radio, Col, Row, Typography } from 'antd';
 export default class Home extends Component {
   
   onPanelChange = (value, mode)=> {
-    console.log(value, mode);
+    // console.log(value, mode);
   }
   render() {
     return (
