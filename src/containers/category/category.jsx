@@ -125,8 +125,13 @@ export default class Category extends Component {
             initialValues={{
               categoryName:this.state.modalCurrentInfo.name
             }}
+            style={{height:'100%'}}
       >
-        <Card title="" extra={<Button type='primary' onClick={()=>{this.showAdd()}}><PlusSquareOutlined />添加</Button>}>
+        <Card 
+        title="" 
+        extra={<Button type='primary' onClick={()=>{this.showAdd()}} ><PlusSquareOutlined />添加</Button>}
+        style={{height:'100%'}}
+        >
           <Table 
             dataSource={this.state.list} 
             columns={columns} 

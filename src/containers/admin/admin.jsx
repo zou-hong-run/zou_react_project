@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import {connect} from "react-redux";
 import {Redirect,Route,Switch} from 'react-router-dom';
 import {Layout} from 'antd';
-import {reqCategory} from '../../api/index';
 
 import Header from './header/header';
 import './css/admin.less';
@@ -26,13 +25,6 @@ const { Footer, Sider, Content } = Layout;
   {}
 )
 class admin extends Component {
-  componentDidMount(){
-     
-  }
-  getList = async ()=>{
-    let result = await reqCategory()
-    console.log(result)
-  }
   //在render里，若想实现跳转，最好用<Redirect></Redirect>
   render() {
     const {isLogin} = this.props.userInfo
@@ -60,7 +52,7 @@ class admin extends Component {
                 {/* 重定向会从app开始重新匹配 */}
               </Switch>
             </Content>
-            <Footer>俺们推荐您使用谷歌浏览器，以便获取最佳体验<button onClick={this.getList}></button></Footer>
+            <Footer>俺们推荐您使用谷歌浏览器，以便获取最佳体验</Footer>
           </Layout>
         </Layout>
       )

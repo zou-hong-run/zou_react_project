@@ -15,3 +15,7 @@ export const reqWeather = ()=>myAxios.post('https://route.showapi.com/9-9',{
 export const reqAddCatetory = (categoryName)=>myAxios.post(BASE_URL+'/manage/category/add',{categoryName})
 //更新分类
 export const reqUpdateCatetory = (categoryId,categoryName) =>myAxios.post(BASE_URL+"/manage/category/update",{categoryId,categoryName})
+//获取商品分页列表
+export const reqProductList = (pageSize,pageNum) =>myAxios.get(BASE_URL+'/manage/product/list',{params:{pageSize,pageNum}})
+//请求更新商品状态
+export const reqUpdateProductStatus = (productId,status) =>myAxios.post(BASE_URL+'/manage/product/updateStatus',{productId,status})
