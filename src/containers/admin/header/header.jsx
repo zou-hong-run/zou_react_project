@@ -84,7 +84,7 @@ class Header extends Component {
   }
   //获取标题
   getTitle = ()=>{
-    let pathKey = this.props.location.pathname.split('/').reverse()[0]
+    let pathKey = this.props.location.pathname.indexOf('product')!==-1 ? 'product' : this.props.location.pathname.split('/').reverse()[0]
     let title = ''
     menuList.forEach((item)=>{
       if(item.children instanceof Array){

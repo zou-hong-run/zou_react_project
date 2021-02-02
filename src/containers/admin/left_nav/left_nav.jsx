@@ -46,7 +46,7 @@ class Left_nav extends Component {
 
   render() {
     let {pathname} = this.props.location
-    let path = pathname.split('/').reverse()[0]
+    let path = pathname.indexOf('product')!==-1 ? 'product' : pathname.split('/').reverse()[0]
     let pathArr = pathname.split('/').splice(2)
     return (
       <div>

@@ -1,36 +1,56 @@
 import React, { Component } from 'react'
+import {connect} from 'react-redux';
+import {createSaveProductAction} from '../../redux/actions/product_action';
 import {Table,Button,Card,Select,Input,message} from 'antd';
 import {PlusSquareOutlined,FileSearchOutlined} from '@ant-design/icons';
+
+
 import {PAGE_SIZE} from '../../config/index'
-import {reqProductList,reqUpdateProductStatus} from '../../api/index';
+import {reqProductList,reqUpdateProductStatus,reqProductSearch} from '../../api/index';
 const {Option} = Select
-export default class Product extends Component {
+@connect(
+  state=>({}),
+  {
+    saveProduct:createSaveProductAction
+  }
+)
+class Product extends Component {
   state = {
     productList:[],//商品列表数据
     total:'',//商品总条数
-    current:1//显示第几页
+    current:1,//显示第几页
+    keyWord:'',//搜索关键字
+    searchType:'productName'//搜索类型
   }
   componentDidMount(){
     this.getProductList()
   }
-  //select选择器
-  handleChange = (value)=>{
-    console.log(`selected ${value}`);
-  }
   //得到商品列表
   getProductList = async (current=1)=>{
-    let result = await reqProductList(PAGE_SIZE,current)//每页多少条数据，当前为第几页
+    let result
+    if(this.isSearch){
+      const {searchType,keyWord} = this.state
+      result = await reqProductSearch(PAGE_SIZE,1,searchType,keyWord)
+    }else{
+      result = await reqProductList(PAGE_SIZE,current)//每页多少条数据，当前为第几页
+    }
     const {status,data,msg} = result
-    // console.log(data)
     if(status===0){
       this.setState({
         productList:data.list,
         total:data.total,
         current:current
       })
+      //把获取到的商品列表存放到redux里面，方便后面获取单项商品信息，而不用再次发送请求
+      this.props.saveProduct(data.list)
     }else{
       message.error(msg)
     }
+  }
+  //发起搜索请求
+  search = async ()=>{
+    this.isSearch = true
+    this.getProductList()
   }
   //更新商品上架状态
   updateProductStatus = async ({_id,status})=>{
@@ -103,14 +123,14 @@ export default class Product extends Component {
       },
       {
         title: '操作',
-        dataIndex: 'opera',
+        // dataIndex: 'opera',
         key: 'opera',
         width:'25%',
         render:(opera)=>{
           return(
             <div>
-              <Button type='link' size='small'>详情</Button>
-              <Button type='link' size='small'>修改</Button>
+              <Button type='link' size='small' onClick={()=>{this.props.history.push('/admin/prod_about/product/detail/'+opera._id)}}>详情</Button>
+              <Button type='link' size='small' onClick={()=>{this.props.history.push('/admin/prod_about/product/add_update/123')}}>修改</Button>
             </div>
           )
         },
@@ -122,15 +142,30 @@ export default class Product extends Component {
       <Card 
         title={
           <>
-            <Select defaultValue="name" onChange={this.handleChange}>
-              <Option value="name">按名称搜索</Option>
-              <Option value="desc">按描述搜索</Option>
+            <Select defaultValue="productName" onChange={
+              (value)=>{
+                this.setState({
+                  searchType:value
+                })
+              }
+            }>
+              <Option value="productName">按名称搜索</Option>
+              <Option value="productDesc">按描述搜索</Option>
             </Select>
-            <Input placeholder="请输入商品关键字...." allowClear='true' style={{width:250,margin:'0 10px'}} />
-            <Button type='primary'><FileSearchOutlined />搜索</Button>
+            <Input 
+              onChange={(event)=>{
+                this.setState({
+                  keyWord:event.target.value
+                })
+              }} 
+              placeholder="请输入商品关键字...." 
+              allowClear='true' 
+              style={{width:250,margin:'0 10px'}} 
+            />
+            <Button type='primary' onClick={this.search}><FileSearchOutlined />搜索</Button>
           </>
         } 
-        extra={<Button type='primary'><PlusSquareOutlined/>添加商品</Button>} 
+        extra={<Button type='primary' onClick={()=>{this.props.history.push('/admin/prod_about/product/add_update')}}><PlusSquareOutlined/>添加商品</Button>} 
         style={{height:"100%"}}
       
       >
@@ -151,3 +186,4 @@ export default class Product extends Component {
     )
   }
 }
+export default Product

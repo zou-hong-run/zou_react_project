@@ -1,11 +1,17 @@
 import React, { Component } from 'react'
 import { Button, Card,Table,message,Modal,Form,Input } from 'antd';
 import {PlusSquareOutlined} from '@ant-design/icons';
-
+import {connect} from 'react-redux';
+import {createSaveCategoryAction} from '../../redux/actions/category_action';
 import {reqCategory,reqAddCatetory,reqUpdateCatetory} from '../../api/index';
 import {PAGE_SIZE} from '../../config/index';
-
-export default class Category extends Component {
+@connect(
+  state=>({}),
+  {
+    saveCategoryList:createSaveCategoryAction
+  }
+)
+class Category extends Component {
   formRef = React.createRef();
   state = {
     list:[],//商品分类列表
@@ -20,7 +26,11 @@ export default class Category extends Component {
   getList = async ()=>{
     let result = await reqCategory()
     const {status,data,msg} = result
-    if(status===0) this.setState({list:data.reverse()})
+    if(status===0) {
+      //将获取到的data存入redux
+      this.props.saveCategoryList(data)
+      this.setState({list:data.reverse()})
+    }
     else message.error(msg)
   }
   //展示添加弹窗
@@ -164,3 +174,4 @@ export default class Category extends Component {
     )
   }
 }
+export default Category
