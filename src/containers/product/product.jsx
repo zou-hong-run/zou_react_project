@@ -130,7 +130,7 @@ class Product extends Component {
           return(
             <div>
               <Button type='link' size='small' onClick={()=>{this.props.history.push('/admin/prod_about/product/detail/'+opera._id)}}>详情</Button>
-              <Button type='link' size='small' onClick={()=>{this.props.history.push('/admin/prod_about/product/add_update/123')}}>修改</Button>
+              <Button type='link' size='small' onClick={()=>{this.props.history.push('/admin/prod_about/product/add_update/'+opera._id)}}>修改</Button>
             </div>
           )
         },

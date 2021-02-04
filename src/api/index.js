@@ -30,3 +30,9 @@ export const reqProductSearch = (pageSize,pageNum,searchType,keyWord)=>{
 }
 //根据商品分类id获取商品信息(后端未写该接口)
 // export const reqProdById = (categoryId)=>myAxios.get(BASE_URL+"/manage/product/info",{params:{categoryId}})
+//请求根据图片名删除图片
+export const reqDeletePicture = (name) =>myAxios.post(BASE_URL+'/manage/img/delete',{name})
+//请求添加商品
+export const reqAddProduct = (productObj) =>myAxios.post(BASE_URL+'/manage/product/add',{...productObj})
+//请求更新商品
+export const reqUpdateProduct = (productObj) =>myAxios.post(BASE_URL+'/manage/product/update',{...productObj})
